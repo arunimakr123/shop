@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+    {% if category %}
+        {{category.description|truncatewords:155}}
+    {% else %}
+            Welcome to Druva Collection where you can buys different items...
+    {% endif %}
+{% endblock %}
+
+{% block title %}
+{% if category %}
+        {{category.name}}-Druva Store
+    {% else %}
+        See our New collections-Druva Store
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+{% if category %}
+
+<div>
+        <div clas="row my_row_class" >
+            <div class="mx_auto">
+            <p><a href="{% url 'ecommerceapp:allProdCat' %}">Our Product collections </a></p>
+        </div>
+            </div>
+    </div>
+    {% endif %}
+
+<div class="mx_auto">
+    {% if category %}
+    <img class="my_image" src="{{category.image.url}}" alt="{{category.name}}">
+</div>
+<br>
+
+
+<div>
+    <h1 class="text-center my_title">{{category.name}}</h1>
+     <p class="text-justify">{{category.description}}</p>
+
+</div>
+
+    {% else %}
+    <div>
+    <img class="my_image my_image_padding" src="{% static 'img/banner.png' %}" alt="Our Product" width="1350px">
+    </div>
+    <br>
+    <div>
+        <h1 class="text-center my_title"> Our Product collections </h1>
+        <p class="text-justify">Chiffon is a lightweight fabric which is associated with elegance and luxury;[4] it drapes well and has a shimmery and sheer appearance.[1][4] Under a magnifying glass, chiffon resembles a fine net or mesh, which gives it some transparency.
+
+Chiffon can be produced out of natural and synthetic fibres.[1] Silk chiffon was very expensive, and it is with the development of synthetic chiffon, such as nylon chiffon, polyester chiffon, and rayon chiffon, that chiffon became more accessible and more popular for common usage.[1][4]
+
+Since chiffon is a light-weight fabric which frays easily, bound or French seams must be used to stop the fabric from fraying. These seams are characterized by s-twist and z-twist crepe yarns, that are spun in counter-clockwise and clockwise motions respectively. [5]</p>
+</div>
+{% endif %}
+    <div class="container">
+        <div class="row mx_auto">
+            {% for product in products.object_list %}
+            <div class="my_bottom_margin col-9 col-sm-12 col-md-4 xol-lg-4">
+                <div class="card text-center" style="min-width:18rem;">
+                    <a href="{{product.get_url}}"><img class="card-img-top my_image"  src="{{product.image.url}}" style="width:300px;height:500px" alt="{{product.name}}"></a>
+                    <div class="card-body">
+                        <h4>{{product.name}}</h4>
+                        <p>{{product.price}}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="mx_auto">
+            {% if products.paginator.num_pages > 1 %}
+
+            <hr>
+            <div class="text_center">
+                {% for pg in products.paginator.page_range %}
+                <a href="?page={{pg}}" class="btn btn-light btn_sm {% if products.number == pg %}active {% endif %}">{{pg}}</a>
+                {% endfor %}
+            </div>
+        {% endif %}
+        </div>
+        <br>
+    </div>
+{% endblock %}
